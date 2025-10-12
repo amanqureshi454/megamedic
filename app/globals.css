@@ -258,18 +258,6 @@ body {
   mask-mode: alpha;
 }
 
-@import "tailwindcss";
-@plugin "@tailwindcss/typography";
-@theme {
-  --breakpoint-xs: 480px;
-  --color-primary: #34855b;
-  --color-background: #f6f2fb;
-  --color-gray-background: #eae7f2;
-  --color-gray-secondary: #c4c4c4;
-  --color-product-background: #d9d9d9;
-  --color-blackish: #1e1e1e;
-  --color-darkblue: #1c3141;
-}
 body {
   scroll-behavior: auto; /* Let Lenis control it */
   overflow: hidden; /* Optional: to avoid double scroll */
@@ -491,7 +479,7 @@ body {
   /* overflow: hidden; */
   border-radius: 22.5em;
   z-index: 2;
-  opacity: 0;
+  /* opacity: 0; */
 }
 
 #home-reel-video-title {
@@ -724,8 +712,8 @@ body {
 }
 
 #home-reel-video-close {
-  opacity: 0;
-  pointer-events: none;
+  /* opacity: 0; */
+  cursor: pointer;
   position: absolute;
   top: 16px;
   right: 16px;
