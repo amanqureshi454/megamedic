@@ -8,6 +8,7 @@ import { useRef } from "react";
 
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import VideoExpanded from "./VideoExpanded";
+import VideoExpandWidth from "./VideoExpandWidth";
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export default function OurValues({ data }) {
@@ -50,7 +51,8 @@ export default function OurValues({ data }) {
       </div>
 
       {/* <VideoScrub /> */}
-      <VideoExpanded />
+      <VideoExpandWidth />
+      {/* <VideoExpanded /> */}
     </section>
   );
 }
