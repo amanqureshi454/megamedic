@@ -79,10 +79,10 @@ export default function HomeHeroModel(props) {
     window.document.body.style.cursor = isIn ? "pointer" : "default";
     const shapeName = target.current.name;
     const initialTransform = initialTransforms[shapeName];
-    gsap.to(target.current.position, {
-      y: isIn ? initialTransform.position.y + 0.2 : initialTransform.position.y,
-      duration: 0.8,
-    });
+    // gsap.to(target.current.position, {
+    //   y: isIn ? initialTransform.position.y + 0.1 : initialTransform.position.y,
+    //   duration: 0.7,
+    // });
     gsap.to(target.current.rotation, {
       y: isIn
         ? initialTransform.rotation.y + Math.PI * 2
@@ -165,7 +165,7 @@ export default function HomeHeroModel(props) {
             onPointerOut={(e) =>
               hoverAnimation(shapeRefs.current[index], shape.hoverText, false)
             }
-            onPointerDown={() => {
+            onClick={() => {
               router.push(shape.url);
               hoverAnimation(shapeRefs.current[index], shape.hoverText, true);
             }}
@@ -176,7 +176,7 @@ export default function HomeHeroModel(props) {
             castShadow
           >
             <mesh position={[0, 0, 0]}>
-              <sphereGeometry args={[0.8, 32, 32]} />
+              <sphereGeometry args={[0.5, 32, 32]} />
               <meshBasicMaterial transparent opacity={0} />
             </mesh>
           </mesh>
