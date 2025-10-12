@@ -1,26 +1,26 @@
 "use client";
-import { useGSAP } from "@gsap/react"
+import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef, useState } from "react";
 import { useDeviceType } from "../_lib/useDeviceType";
 
-gsap.registerPlugin(ScrollTrigger)
+gsap.registerPlugin(ScrollTrigger);
 
 const calculateTopGap = (elm) => {
-    return (window.innerHeight - elm.clientHeight) / 2;
-}
+  return (window.innerHeight - elm.clientHeight) / 2;
+};
 
 const VideoExpanded = () => {
-  const videoSectionRef = useRef(null)
-  const wrapperRef = useRef(null)
+  const videoSectionRef = useRef(null);
+  const wrapperRef = useRef(null);
   const videoContainerRef = useRef(null);
   const introVideoRef = useRef(null);
   const videoRef = useRef(null);
-  const masterTLRef = useRef(null)
-  const videoTLRef = useRef(null)
-  const overlayVideoRef = useRef(null)
-  const { isMobile, isDesktop } = useDeviceType()
+  const masterTLRef = useRef(null);
+  const videoTLRef = useRef(null);
+  const overlayVideoRef = useRef(null);
+  const { isMobile, isDesktop } = useDeviceType();
 
   const [muted, setMuted] = useState(!true);
   const [play, setPlay] = useState(false);
@@ -74,10 +74,10 @@ const VideoExpanded = () => {
 
   const handleForceStart = () => {
     if (masterTLRef.current) {
-      console.log('clicked')
+      console.log("clicked");
       // Scroll the page to the trigger’s start position
       const startY = masterTLRef.current.start;
-      window.scrollTo({ top: startY, behavior: 'smooth' });
+      window.scrollTo({ top: startY, behavior: "smooth" });
 
       if (videoTLRef.current) {
         videoTLRef.current.pause();
@@ -100,7 +100,9 @@ const VideoExpanded = () => {
       const duration = video.duration;
       if (duration && !isNaN(duration) && duration > 0) {
         const percentage = (currentTime / duration) * 100;
-        const progressBar = document.querySelector("#our-values-video-progress");
+        const progressBar = document.querySelector(
+          "#our-values-video-progress",
+        );
         if (progressBar) {
           progressBar.style.width = `${percentage}%`;
         }
@@ -111,7 +113,7 @@ const VideoExpanded = () => {
 
           window.scrollTo({
             top: endPosition,
-            behavior: 'smooth'
+            behavior: "smooth",
           });
         }
       }
@@ -150,8 +152,8 @@ const VideoExpanded = () => {
       videoWrapper.classList.add("active");
       setPlay(true);
 
-      if ('fastSeek' in video) video.fastSeek(0)
-      else video.currentTime = 0
+      if ("fastSeek" in video) video.fastSeek(0);
+      else video.currentTime = 0;
 
       video.play().catch((error) => {
         console.warn("Video play failed:", error);
@@ -176,8 +178,8 @@ const VideoExpanded = () => {
     if (!video) return;
 
     if (play) {
-      if ('fastSeek' in video) video.fastSeek(0)
-      else video.currentTime = 0
+      if ("fastSeek" in video) video.fastSeek(0);
+      else video.currentTime = 0;
 
       video.play().catch((error) => {
         console.warn("Video play failed:", error);
@@ -189,13 +191,18 @@ const VideoExpanded = () => {
 
   // The main scrolling effect here
   useEffect(() => {
-    if (!introVideoRef.current) return
+    if (!introVideoRef.current) return;
 
-    const headingTitle = document.getElementById('our-value-heading-title')
-    const videoWrapper = document.getElementById('videoWrapper')
+    const headingTitle = document.getElementById("our-value-heading-title");
+    const videoWrapper = document.getElementById("videoWrapper");
     const rect = videoContainerRef.current?.getBoundingClientRect();
-    const init = { top: rect.top, left: rect.left, width: rect.width, height: rect.height };
-    const coverScale = 85 * window.innerWidth / init.width / 100
+    const init = {
+      top: rect.top,
+      left: rect.left,
+      width: rect.width,
+      height: rect.height,
+    };
+    const coverScale = (85 * window.innerWidth) / init.width / 100;
 
     if (window.innerWidth >= 768) {
       masterTLRef.current = ScrollTrigger.create({
@@ -204,56 +211,69 @@ const VideoExpanded = () => {
         end: `bottom+=700% bottom`,
         pin: true,
         scrub: 1,
-        markers: true,
+        markers: false,
         invalidateOnRefresh: true,
         animation: videoTLRef.current,
         onEnter: () => {
-          setIsVisible(true)
-          setPlay(true)
-          setMuted(false)
+          setIsVisible(true);
+          setPlay(true);
+          setMuted(false);
         },
         onEnterBack: () => {
-          setIsVisible(true)
-          setPlay(true)
-          setMuted(false)
+          setIsVisible(true);
+          setPlay(true);
+          setMuted(false);
         },
         onLeave: () => {
-          setIsVisible(false)
-          setPlay(true)
-          setMuted(true)
+          setIsVisible(false);
+          setPlay(true);
+          setMuted(true);
         },
         onLeaveBack: () => {
-          setIsVisible(false)
-          setPlay(true)
-          setMuted(true)
+          setIsVisible(false);
+          setPlay(true);
+          setMuted(true);
         },
-      })
-  
+      });
+
       videoTLRef.current = gsap.timeline({
         defaults: {
           ease: "none",
         },
         paused: true,
-      })
-  
-      videoTLRef.current.to(overlayVideoRef.current, {
-        opacity: 1,
-      })
-      .to(videoContainerRef.current, {
-        x: 0,
-        duration: 2
-      }, 0)
-      .to(videoRef.current, {
-        scale: coverScale,
-        borderRadius: 0,
-        duration: 2
-      }, 0)
-      .to({}, { duration: 5 }, 1)
-      .to(videoRef.current, {
-        scale: 1,
-        borderRadius: '24px',
-        duration: 2
-      }, 7)
+      });
+
+      videoTLRef.current
+        .to(overlayVideoRef.current, {
+          opacity: 1,
+        })
+        .to(
+          videoContainerRef.current,
+          {
+            x: 0,
+            duration: 2,
+          },
+          0,
+        )
+        .to(
+          videoRef.current,
+          {
+            scale: coverScale,
+            borderRadius: 0,
+            duration: 2,
+          },
+          0,
+        )
+        .to({}, { duration: 5 }, 1)
+        .to(
+          videoRef.current,
+          {
+            scale: 1,
+            borderRadius: "24px",
+            duration: 2,
+          },
+          7,
+        );
     }
 
     const onResize = () => {
@@ -266,10 +286,10 @@ const VideoExpanded = () => {
     return () => {
       if (window.innerWidth >= 768) {
         ScrollTrigger.getAll().forEach((st) => st.kill());
-        videoTLRef.current.kill()
+        videoTLRef.current.kill();
       }
-    }
-  }, [])
+    };
+  }, []);
 
   return (
     <div ref={videoSectionRef} className="relative w-full">
@@ -280,7 +300,7 @@ const VideoExpanded = () => {
       >
         <div
           ref={videoContainerRef}
-          className="relative aspect-video md:w-[55vw] w-[85%] mx-auto"
+          className="relative mx-auto aspect-video w-[85%] md:w-[55vw]"
         >
           <video
             ref={introVideoRef}
@@ -288,48 +308,70 @@ const VideoExpanded = () => {
             muted
             autoPlay={isMobile}
             playsInline
-            className="pointer-events-none z-10 relative size-full object-cover rounded-3xl"
+            className="pointer-events-none relative z-10 size-full rounded-3xl object-cover"
           />
 
-          <div className="z-20 absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">
-            <button id="home-reel-video-watch-btn" aria-label="Watch reel button" onClick={isMobile ? () => setIsVisible(!isVisible) : handleForceStart}>
+          <div className="absolute top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
+            <button
+              id="home-reel-video-watch-btn"
+              aria-label="Watch reel button"
+              onClick={
+                isMobile ? () => setIsVisible(!isVisible) : handleForceStart
+              }
+            >
               <div id="home-reel-video-watch-btn-base"></div>
               <div id="home-reel-video-watch-btn-background"></div>
-              <svg id="home-reel-video-watch-btn-svg" xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="none" viewBox="0 0 36 36"><path fill="currentColor" d="M7 7.29c0-1.5 1.59-2.466 2.92-1.776l20.656 10.71c1.439.747 1.439 2.805 0 3.552L9.92 30.486C8.589 31.176 7 30.21 7 28.71V7.29Z"></path></svg>
+              <svg
+                id="home-reel-video-watch-btn-svg"
+                xmlns="http://www.w3.org/2000/svg"
+                width="36"
+                height="36"
+                fill="none"
+                viewBox="0 0 36 36"
+              >
+                <path
+                  fill="currentColor"
+                  d="M7 7.29c0-1.5 1.59-2.466 2.92-1.776l20.656 10.71c1.439.747 1.439 2.805 0 3.552L9.92 30.486C8.589 31.176 7 30.21 7 28.71V7.29Z"
+                ></path>
+              </svg>
             </button>
           </div>
         </div>
       </div>
 
       <div id="our-values-video-video">
-        <div ref={overlayVideoRef} className="opacity-0 overlay-video hidden md:block bg-black absolute top-0 left-0 size-full pointer-events-none"></div>
+        <div
+          ref={overlayVideoRef}
+          className="overlay-video pointer-events-none absolute top-0 left-0 hidden size-full bg-black opacity-0 md:block"
+        ></div>
 
         <button
           id="home-reel-video-close"
-          className="!opacity-100 !pointer-events-auto"
+          className="!pointer-events-auto !opacity-100"
           onClick={() => {
-            setIsVisible(false)
+            setIsVisible(false);
 
             if (masterTLRef.current) {
               const scrollTrigger = masterTLRef.current;
               const endPosition = scrollTrigger.end;
-  
+
               window.scrollTo({
                 top: endPosition,
-                behavior: 'smooth'
+                behavior: "smooth",
               });
             }
-          }}>
+          }}
+        >
           <span>×</span>
         </button>
-        
+
         <video
           ref={videoRef}
           src="/new-main.mp4"
           muted={muted}
           playsInline
           preload="all"
-          className="pointer-events-none md:!w-[55vw] md:!h-auto md:aspect-video object-contain absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 md:rounded-3xl origin-center"
+          className="pointer-events-none absolute top-1/2 left-1/2 origin-center -translate-x-1/2 -translate-y-1/2 object-contain md:aspect-video md:!h-auto md:!w-[55vw] md:rounded-3xl"
           onLoadStart={() => {
             const progressBar = document.querySelector(
               "#our-values-video-progress",
@@ -368,7 +410,7 @@ const VideoExpanded = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default VideoExpanded
+export default VideoExpanded;
