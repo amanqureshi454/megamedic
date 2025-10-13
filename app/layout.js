@@ -16,9 +16,10 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="">
+    <html lang="en" suppressHydrationWarning className="">
       {/* <LenisProvider> */}
       <body
+        suppressHydrationWarning
         className={`${inter.className} bg-background text-darkblue relative overflow-x-hidden antialiased`}
       >
         <Providers>
