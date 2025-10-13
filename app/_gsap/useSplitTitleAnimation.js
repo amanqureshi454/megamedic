@@ -23,7 +23,7 @@ export const useSplitTitleAnimation = ({
         end: end,
 
         // markers: true,
-        toggleActions: "restart none restart none",
+        toggleActions: "play none none none",
         // toggleActions: "play reverse play reverse", // ✅ animate in & out
       },
     });

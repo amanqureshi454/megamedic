@@ -12,7 +12,7 @@ export default function Header() {
 
   return (
     <header
-      className="sticky top-0 !z-[9999999] flex min-h-24 items-center justify-center px-2 sm:px-4"
+      className="sticky top-0 !z-[99] flex min-h-24 items-center justify-center px-2 sm:px-4"
       style={{
         backdropFilter: scrolled ? "blur(40px)" : "blur(0)",
         background: scrolled ? "rgba(255,255,255,0.1)" : " transparent",

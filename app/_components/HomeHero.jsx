@@ -19,9 +19,9 @@ export default function HomeHero({ data }) {
     >
       {/* overlay */}
       <div className="absolute top-[50%] left-0 h-[50%] w-full bg-gradient-to-b from-transparent via-transparent to-[#F6F2FB]" />
-      <Suspense fallback={null}>
+      {/* <Suspense fallback={null}>
         <HomeHero3D />
-      </Suspense>
+      </Suspense> */}
 
       {/* Mobile Image */}
       <Image

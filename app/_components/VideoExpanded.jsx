@@ -202,7 +202,7 @@ const VideoExpanded = () => {
       width: rect.width,
       height: rect.height,
     };
-    const coverScale = (85 * window.innerWidth) / init.width / 100;
+    const coverScale = (75 * window.innerWidth) / init.width / 100;
 
     if (window.innerWidth >= 768) {
       masterTLRef.current = ScrollTrigger.create({
@@ -292,7 +292,7 @@ const VideoExpanded = () => {
   }, []);
 
   return (
-    <div ref={videoSectionRef} className="relative w-full">
+    <div ref={videoSectionRef} className="relative hidden w-full md:block">
       <div
         ref={wrapperRef}
         id="videoWrapper"

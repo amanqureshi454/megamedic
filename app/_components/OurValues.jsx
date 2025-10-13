@@ -8,11 +8,13 @@ import { useRef } from "react";
 
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import VideoExpanded from "./VideoExpanded";
-import VideoExpandWidth from "./VideoExpandWidth";
+import MobileVideoExpand from "./MobileVideoExpand";
+import { useOrientation } from "../_lib/orientation";
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export default function OurValues({ data }) {
   const ourValuesRef = useRef(null);
+  const orientation = useOrientation();
 
   useSplitTitleAnimation({
     trigger: "#our-value-gsap-title",
@@ -38,21 +40,9 @@ export default function OurValues({ data }) {
         >
           {data?.title}
         </h2>
-        {/* <div className="relative aspect-video w-full overflow-hidden">
-          <iframe
-            title="vimeo-player"
-            src="https://player.vimeo.com/video/1125900592?h=695142dc53"
-            frameborder="0"
-            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-            allowfullscreen
-            className="absolute top-0 left-0 h-full w-full"
-          ></iframe>
-        </div> */}
       </div>
 
-      {/* <VideoScrub /> */}
-      <VideoExpandWidth />
-      {/* <VideoExpanded /> */}
+      {orientation === "portrait" ? <MobileVideoExpand /> : <VideoExpanded />}
     </section>
   );
 }
