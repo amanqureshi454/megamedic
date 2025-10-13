@@ -8,6 +8,7 @@ import { useDeviceType } from "../_lib/useDeviceType";
 gsap.registerPlugin(ScrollTrigger);
 
 const calculateTopGap = (elm) => {
+  if (typeof window === "undefined") return 0;
   return (window.innerHeight - elm.clientHeight) / 2;
 };
 
@@ -75,16 +76,16 @@ const VideoExpanded = () => {
   const handleForceStart = () => {
     if (masterTLRef.current) {
       console.log("clicked");
-      // Scroll the page to the trigger’s start position
       const startY = masterTLRef.current.start;
-      window.scrollTo({ top: startY, behavior: "smooth" });
+      if (typeof window !== "undefined") {
+        window.scrollTo({ top: startY, behavior: "smooth" });
+      }
 
       if (videoTLRef.current) {
         videoTLRef.current.pause();
         videoTLRef.current.progress(2);
       }
 
-      // Ensure the video is visible, playing, and unmuted
       setIsVisible(!isVisible);
       setPlay(!play);
       setMuted(!muted);
@@ -111,10 +112,12 @@ const VideoExpanded = () => {
           const scrollTrigger = masterTLRef.current;
           const endPosition = scrollTrigger.end;
 
-          window.scrollTo({
-            top: endPosition,
-            behavior: "smooth",
-          });
+          if (typeof window !== "undefined") {
+            window.scrollTo({
+              top: endPosition,
+              behavior: "smooth",
+            });
+          }
         }
       }
     };
@@ -165,14 +168,12 @@ const VideoExpanded = () => {
     }
   }, [isVisible]);
 
-  // control muting video
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
     video.muted = muted;
   }, [muted]);
 
-  // control playback video
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -189,13 +190,16 @@ const VideoExpanded = () => {
     }
   }, [play]);
 
-  // The main scrolling effect here
   useEffect(() => {
+    if (typeof window === "undefined") return;
     if (!introVideoRef.current) return;
 
     const headingTitle = document.getElementById("our-value-heading-title");
     const videoWrapper = document.getElementById("videoWrapper");
     const rect = videoContainerRef.current?.getBoundingClientRect();
+
+    if (!rect || !videoWrapper) return;
+
     const init = {
       top: rect.top,
       left: rect.left,
@@ -277,17 +281,20 @@ const VideoExpanded = () => {
     }
 
     const onResize = () => {
-      if (window.innerWidth >= 768) {
+      if (typeof window !== "undefined" && window.innerWidth >= 768) {
         ScrollTrigger.refresh();
       }
     };
 
     window.addEventListener("resize", onResize);
     return () => {
-      if (window.innerWidth >= 768) {
+      if (typeof window !== "undefined" && window.innerWidth >= 768) {
         ScrollTrigger.getAll().forEach((st) => st.kill());
-        videoTLRef.current.kill();
+        if (videoTLRef.current) {
+          videoTLRef.current.kill();
+        }
       }
+      window.removeEventListener("resize", onResize);
     };
   }, []);
 
@@ -351,7 +358,7 @@ const VideoExpanded = () => {
           onClick={() => {
             setIsVisible(false);
 
-            if (masterTLRef.current) {
+            if (masterTLRef.current && typeof window !== "undefined") {
               const scrollTrigger = masterTLRef.current;
               const endPosition = scrollTrigger.end;
 
