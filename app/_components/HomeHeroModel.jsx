@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useRef, useState, useEffect } from "react";
 import { Html, useGLTF } from "@react-three/drei";
 import { useGSAP } from "@gsap/react";
@@ -14,6 +16,7 @@ export default function HomeHeroModel(props) {
 
   const [hoverText, setHoverText] = useState("");
   const [initialTransforms, setInitialTransforms] = useState({});
+  const [isClient, setIsClient] = useState(false);
   const parentRef = useRef();
   const htmlRef = useRef();
   const { contextSafe } = useGSAP();
@@ -26,6 +29,10 @@ export default function HomeHeroModel(props) {
     useRef(), // shape4
     useRef(), // shape5
   ]);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     if (nodes) {
@@ -52,15 +59,18 @@ export default function HomeHeroModel(props) {
 
   useGSAP(
     () => {
+      if (!isClient || !htmlRef.current || typeof window === "undefined")
+        return;
+
       gsap.defaults({ duration: 0.2 });
-      if (!htmlRef.current) return;
-      const canvas = document.getElementById("hero-3d");
+
       const quickX = gsap.quickTo(htmlRef.current, "x", {
         ease: "power2.out",
       });
       const quickY = gsap.quickTo(htmlRef.current, "y", {
         ease: "power2.out",
       });
+
       const animate = (e) => {
         const { clientX, clientY } = e;
         quickX(clientX);
@@ -71,18 +81,20 @@ export default function HomeHeroModel(props) {
 
       return () => window.removeEventListener("mousemove", animate);
     },
-    { dependencies: [hoverText], scope: parentRef, revert: true },
+    { dependencies: [hoverText, isClient], scope: parentRef, revert: true },
   );
 
   const hoverAnimation = contextSafe((target, name, isIn = true) => {
+    if (!isClient) return;
+
     setHoverText(name);
-    window.document.body.style.cursor = isIn ? "pointer" : "default";
+    if (typeof window !== "undefined") {
+      window.document.body.style.cursor = isIn ? "pointer" : "default";
+    }
+
     const shapeName = target.current.name;
     const initialTransform = initialTransforms[shapeName];
-    // gsap.to(target.current.position, {
-    //   y: isIn ? initialTransform.position.y + 0.1 : initialTransform.position.y,
-    //   duration: 0.7,
-    // });
+
     gsap.to(target.current.rotation, {
       y: isIn
         ? initialTransform.rotation.y + Math.PI * 2
@@ -129,6 +141,7 @@ export default function HomeHeroModel(props) {
   ];
 
   const router = useRouter();
+
   return (
     <>
       <Html wrapperClass="pointer-events-none size-full -translate-x-1/2 -translate-y-1/2 !fixed top-0 left-0 ">
