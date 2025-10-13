@@ -19,6 +19,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className="">
       {/* <LenisProvider> */}
       <body
+  suppressHydrationWarning
         className={`${inter.className} bg-background text-darkblue relative overflow-x-hidden antialiased`}
       >
         <Providers>
