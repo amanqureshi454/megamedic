@@ -158,6 +158,25 @@ const VideoExpandWidth = () => {
     };
   }, [isVisible]);
 
+  const iframeRef = useRef(null);
+
+  const handlePlay = () => {
+    const iframe = iframeRef.current;
+    if (iframe) {
+      // Tell Vimeo to play and unmute
+      iframe.contentWindow.postMessage(
+        JSON.stringify({ method: "play" }),
+        "https://player.vimeo.com",
+      );
+      iframe.contentWindow.postMessage(
+        JSON.stringify({ method: "setVolume", value: 1 }),
+        "https://player.vimeo.com",
+      );
+
+      setPlay(true); // hide button
+    }
+  };
+
   return (
     // <div
     //   ref={wrapperRef}
@@ -261,16 +280,51 @@ const VideoExpandWidth = () => {
 
       {/* Vimeo iframe */}
 
-      <div
-        className={`relative flex h-[30vh] w-full origin-center items-center justify-center overflow-hidden transition-all duration-500 md:h-[70vh]`}
-      >
-        <iframe
-          src="https://player.vimeo.com/video/1125900592?autoplay=1&muted=1"
-          className="h-[30vh] w-[90vw] rounded-3xl object-contain md:h-[60vh] md:w-[55vw]"
-          frameBorder="0"
-          allow="autoplay; fullscreen; picture-in-picture"
-          allowFullScreen
-        ></iframe>
+      <div className="relative flex h-[30vh] w-full origin-center items-center justify-center overflow-hidden transition-all duration-500 md:h-[70vh]">
+        <div className="relative h-[30vh] w-[90vw] md:h-[60vh] md:w-[55vw]">
+          {/* Show play button before video starts */}
+          {!play && (
+            <div className="absolute top-1/2 left-1/2 z-[32] -translate-x-1/2 -translate-y-1/2">
+              <button
+                id="home-reel-video-watch-btn"
+                aria-label="Watch reel button"
+                onClick={handlePlay}
+              >
+                <div id="home-reel-video-watch-btn-base"></div>
+                <div id="home-reel-video-watch-btn-background"></div>
+                <svg
+                  id="home-reel-video-watch-btn-svg"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="36"
+                  height="36"
+                  fill="none"
+                  viewBox="0 0 36 36"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M7 7.29c0-1.5 1.59-2.466 2.92-1.776l20.656 10.71c1.439.747 1.439 2.805 0 3.552L9.92 30.486C8.589 31.176 7 30.21 7 28.71V7.29Z"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+          )}
+
+          {/* Video iframe — only loaded after button click */}
+          {/* {play && ( */}
+          <iframe
+            ref={iframeRef}
+            src={
+              play
+                ? "https://player.vimeo.com/video/1125900592?autoplay=1&muted=0&controls=1"
+                : "https://player.vimeo.com/video/1125900592?autoplay=0&muted=1&controls=0"
+            }
+            className="h-[30vh] w-[90vw] rounded-3xl object-contain md:h-[60vh] md:w-[55vw]"
+            frameBorder="0"
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+          {/* )} */}
+        </div>
       </div>
     </>
   );
