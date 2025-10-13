@@ -64,14 +64,14 @@ const MobileVideoExpand = () => {
       {isExpanded && (
         <>
           {/* Close Button - Outside Modal for z-index */}
-          <button
-            onClick={handleClose}
-            className="fixed top-6 right-6 z-[102] rounded-full bg-[#2f855a] p-2 md:hidden"
-          >
-            <span>×</span>
-          </button>
 
           <div className="fixed inset-0 z-[101] flex items-center justify-center bg-black md:hidden">
+            <button
+              onClick={handleClose}
+              className="absolute top-6 right-6 z-[102] flex h-10 w-10 items-center justify-center rounded-full bg-[#2f855a] p-2 md:hidden"
+            >
+              <p className="text-xl text-white">×</p>
+            </button>
             {/* Video Container */}
             <div className="relative h-auto max-h-screen w-full overflow-auto">
               <video
