@@ -1,14 +1,18 @@
+"use client";
+
 import { useState, useEffect } from "react";
 
 export function useOrientation() {
-  const [orientation, setOrientation] = useState(
-    window.innerHeight > window.innerWidth ? "portrait" : "landscape",
-  );
+  const [orientation, setOrientation] = useState("landscape");
 
   useEffect(() => {
+    const getOrientation = () =>
+      window.innerHeight > window.innerWidth ? "portrait" : "landscape";
+
+    setOrientation(getOrientation());
+
     const handleResize = () => {
-      const newOrientation =
-        window.innerHeight > window.innerWidth ? "portrait" : "landscape";
+      const newOrientation = getOrientation();
       setOrientation(newOrientation);
     };
 
