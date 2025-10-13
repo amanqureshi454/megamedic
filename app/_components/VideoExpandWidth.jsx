@@ -265,7 +265,7 @@ const VideoExpandWidth = () => {
         className={`relative flex h-[30vh] w-full origin-center items-center justify-center overflow-hidden transition-all duration-500 md:h-[70vh]`}
       >
         <iframe
-          src="https://player.vimeo.com/video/1125900592?autoplay=1&muted=0"
+          src="https://player.vimeo.com/video/1125900592?autoplay=1&muted=1"
           className="h-[30vh] w-[90vw] rounded-3xl object-contain md:h-[60vh] md:w-[55vw]"
           frameBorder="0"
           allow="autoplay; fullscreen; picture-in-picture"
