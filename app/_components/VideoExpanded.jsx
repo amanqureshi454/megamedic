@@ -8,7 +8,6 @@ import { useDeviceType } from "../_lib/useDeviceType";
 gsap.registerPlugin(ScrollTrigger);
 
 const calculateTopGap = (elm) => {
-  if (typeof window === "undefined") return 0;
   return (window.innerHeight - elm.clientHeight) / 2;
 };
 
@@ -76,16 +75,16 @@ const VideoExpanded = () => {
   const handleForceStart = () => {
     if (masterTLRef.current) {
       console.log("clicked");
+      // Scroll the page to the trigger’s start position
       const startY = masterTLRef.current.start;
-      if (typeof window !== "undefined") {
-        window.scrollTo({ top: startY, behavior: "smooth" });
-      }
+      window.scrollTo({ top: startY, behavior: "smooth" });
 
       if (videoTLRef.current) {
         videoTLRef.current.pause();
         videoTLRef.current.progress(2);
       }
 
+      // Ensure the video is visible, playing, and unmuted
       setIsVisible(!isVisible);
       setPlay(!play);
       setMuted(!muted);
@@ -112,12 +111,10 @@ const VideoExpanded = () => {
           const scrollTrigger = masterTLRef.current;
           const endPosition = scrollTrigger.end;
 
-          if (typeof window !== "undefined") {
-            window.scrollTo({
-              top: endPosition,
-              behavior: "smooth",
-            });
-          }
+          window.scrollTo({
+            top: endPosition,
+            behavior: "smooth",
+          });
         }
       }
     };
@@ -194,7 +191,6 @@ const VideoExpanded = () => {
 
   // The main scrolling effect here
   useEffect(() => {
-    if (typeof window === "undefined") return;
     if (!introVideoRef.current) return;
 
     const headingTitle = document.getElementById("our-value-heading-title");
