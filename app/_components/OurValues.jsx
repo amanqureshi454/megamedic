@@ -9,7 +9,8 @@ import { useRef } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import VideoExpanded from "./VideoExpanded";
 import MobileVideoExpand from "./MobileVideoExpand";
-import { useOrientation } from "../_lib/orientation";
+import ClientOnly from "../_lib/orientation";
+import { useOrientation } from "../_lib/ClientOnly";
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export default function OurValues({ data }) {
@@ -42,7 +43,9 @@ export default function OurValues({ data }) {
         </h2>
       </div>
 
-      {orientation === "portrait" ? <MobileVideoExpand /> : <VideoExpanded />}
+      {orientation === "portrait" ? <MobileVideoExpand /> :<ClientOnly>
+  <VideoExpanded />
+</ClientOnly>}
     </section>
   );
 }
