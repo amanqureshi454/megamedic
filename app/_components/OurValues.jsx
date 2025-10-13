@@ -5,10 +5,15 @@ import { useSplitTitleAnimation } from "../_gsap/useSplitTitleAnimation";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { useRef } from "react";
-
+import dynamic from "next/dynamic";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import VideoExpanded from "./VideoExpanded";
-import MobileVideoExpand from "./MobileVideoExpand";
+const VideoExpanded = dynamic(() => import("./VideoExpanded"), {
+  ssr: false,
+});
+const MobileVideoExpand = dynamic(() => import("./MobileVideoExpand"), {
+  ssr: false,
+});
+
 import ClientOnly from "../_lib/ClientOnly";
 import { useOrientation } from "../_lib/orientation";
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -46,9 +51,9 @@ export default function OurValues({ data }) {
       {orientation === "portrait" ? (
         <MobileVideoExpand />
       ) : (
-        <ClientOnly>
-          <VideoExpanded />
-        </ClientOnly>
+        // <ClientOnly>
+        <VideoExpanded />
+        // </ClientOnly>
       )}
     </section>
   );
