@@ -16,6 +16,7 @@ const MobileVideoExpand = dynamic(() => import("./MobileVideoExpand"), {
 
 import ClientOnly from "../_lib/ClientOnly";
 import { useOrientation } from "../_lib/orientation";
+import VideoGsap from "./VideoGsap";
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export default function OurValues({ data }) {
@@ -47,14 +48,15 @@ export default function OurValues({ data }) {
           {data?.title}
         </h2>
       </div>
-
+      {/* 
       {orientation === "portrait" ? (
         <MobileVideoExpand />
       ) : (
         // <ClientOnly>
         <VideoExpanded />
         // </ClientOnly>
-      )}
+      )} */}
+      <VideoGsap />
     </section>
   );
 }
