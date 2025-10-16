@@ -10,6 +10,7 @@ gsap.registerPlugin(ScrollTrigger);
 export default function VideoGsap() {
   const containerRef = useRef(null);
   const videoWrapperRef = useRef(null);
+
   const videoRef = useRef(null);
   const playButtonRef = useRef(null);
   const timelineRef = useRef(null);
