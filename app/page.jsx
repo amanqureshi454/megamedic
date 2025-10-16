@@ -56,10 +56,10 @@ export default async function Home() {
   if (!homeData) return <p>hsdjk</p>;
   function OurRendered(item, index) {
     if (item?.__component === "blocks.home-hero") {
-      // return <HomeHero key={index} data={item} />;
+      return <HomeHero key={index} data={item} />;
     }
     if (item?.__component === "blocks.company-intro") {
-      // return <CompanyIntro key={index} data={item} />;
+      return <CompanyIntro key={index} data={item} />;
     }
     if (item?.__component === "blocks.partners") {
       return <OurPartners key={index} data={item} />;
@@ -70,7 +70,7 @@ export default async function Home() {
   }
   return (
     <div className="-mt-24 overflow-x-hidden">
-      {/* <LiquidShader /> */}
+      <LiquidShader />
       {homeData?.content?.map((item, index) => OurRendered(item, index))}
     </div>
   );

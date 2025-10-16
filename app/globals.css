@@ -829,3 +829,8 @@ body {
     transform: translateX(-50%);
   }
 }
+
+/* globals.css or app.css */
+[bis_skin_checked] {
+  /* This won't remove the attribute but acknowledges it exists */
+}
