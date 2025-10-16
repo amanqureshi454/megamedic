@@ -215,7 +215,7 @@ export default function VideoGsap() {
     >
       <div
         ref={videoWrapperRef}
-        className="relative z-[60] h-[60vh] w-[45vw] overflow-hidden"
+        className="relative z-[60] h-[60vh] w-[45vw] overflow-hidden rounded-3xl"
         style={{ transition: "all 0.8s ease-out" }}
         suppressHydrationWarning
       >
@@ -225,7 +225,7 @@ export default function VideoGsap() {
           muted={muted}
           preload="auto"
           loop
-          className="round absolute inset-0 h-full w-full object-cover"
+          className="round absolute inset-0 h-full w-full rounded-3xl object-cover"
         >
           <source src="/new-main.mp4" type="video/mp4" />
         </video>
