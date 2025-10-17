@@ -80,48 +80,52 @@ export default function VideoGsap() {
       gsap.to(videoWrapper, {
         width: "100vw",
         height: "100vh",
-        borderRadius: "0px", // 🟣 remove border radius when expanded
+        duration: 0.8,
+        ease: "power2.out",
+        // animate the CSS var --radius to 0
+        onStart: () => {}, // optional
+        // gsap can animate CSS vars directly:
+        vars: undefined, // noop to keep lint happy
+      });
+
+      // animate the CSS var separately
+      gsap.to(videoWrapper, {
+        "--radius": "0px",
         duration: 0.8,
         ease: "power2.out",
       });
       gsap.to(videoRef, {
-        borderRadius: "0px",
+        "--radius": "0px",
+        duration: 0.8,
+        ease: "power2.out",
       });
 
-      if (navbar) {
-        gsap.to(navbar, {
-          y: -100,
-          opacity: 0,
-          duration: 0.5,
-        });
-      }
+      if (navbar) gsap.to(navbar, { y: -100, opacity: 0, duration: 0.5 });
 
       setShowControls(true);
       setPlaying(true);
-
-      if (userInteracted) {
-        setMuted(false);
-      }
+      if (userInteracted) setMuted(false);
     };
 
     const resetVideo = () => {
       gsap.to(videoWrapper, {
         width: "45vw",
         height: "60vh",
-        borderRadius: "24px",
+        duration: 0.8,
+        ease: "power2.out",
+      });
+      gsap.to(videoWrapper, {
+        "--radius": "24px",
         duration: 0.8,
         ease: "power2.out",
       });
       gsap.to(videoRef, {
-        borderRadius: "24px",
+        "--radius": "24px",
+        duration: 0.8,
+        ease: "power2.out",
       });
-      if (navbar) {
-        gsap.to(navbar, {
-          y: 0,
-          opacity: 1,
-          duration: 0.5,
-        });
-      }
+
+      if (navbar) gsap.to(navbar, { y: 0, opacity: 1, duration: 0.5 });
 
       setShowControls(false);
       setPlaying(false);
@@ -132,7 +136,7 @@ export default function VideoGsap() {
       scrollTrigger: {
         trigger: container,
         start: "top top",
-        end: "bottom+=100% bottom",
+        end: "bottom+=200% bottom",
         pin: true,
         scrub: false,
         markers: false,
@@ -215,8 +219,8 @@ export default function VideoGsap() {
     >
       <div
         ref={videoWrapperRef}
-        className="relative z-[60] h-[60vh] w-[45vw] overflow-hidden rounded-3xl"
-        style={{ transition: "all 0.8s ease-out" }}
+        className="relative z-[60] h-[60vh] w-[45vw] overflow-hidden"
+        style={{ transition: "all 0.8s ease-out", ["--radius"]: "24px" }}
         suppressHydrationWarning
       >
         <video
@@ -225,7 +229,8 @@ export default function VideoGsap() {
           muted={muted}
           preload="auto"
           loop
-          className="round absolute inset-0 h-full w-full rounded-3xl object-cover"
+          style={{ borderRadius: "var(--radius)" }}
+          className="absolute inset-0 h-full w-full object-cover"
         >
           <source src="/new-main.mp4" type="video/mp4" />
         </video>
