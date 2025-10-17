@@ -232,7 +232,7 @@ export default function VideoGsap() {
           style={{ borderRadius: "var(--radius)" }}
           className="absolute inset-0 h-full w-full object-cover"
         >
-          <source src="/new-main.mp4" type="video/mp4" />
+          <source src="/Final_Textspacing.mp4" type="video/mp4" />
         </video>
 
         {/* Play button overlay */}
