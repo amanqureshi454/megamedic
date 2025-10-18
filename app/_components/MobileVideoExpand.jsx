@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import { Play, Pause, Volume2, VolumeX } from "lucide-react";
+import gsap from "gsap";
 
 const MobileVideoExpand = () => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -11,6 +12,16 @@ const MobileVideoExpand = () => {
 
   const videoRef = useRef(null);
 
+  useEffect(() => {
+    const navbar = document.querySelector(".navbar");
+    if (!navbar) return;
+    gsap.to(navbar, {
+      y: isExpanded ? -100 : 0,
+      opacity: isExpanded ? 0 : 1,
+      duration: 0.5,
+      ease: "power2.out",
+    });
+  }, [isExpanded]);
   // 🟢 Update progress as video plays
   const handleTimeUpdate = () => {
     if (videoRef.current) {
@@ -122,7 +133,7 @@ const MobileVideoExpand = () => {
           {/* ❌ Close Button */}
           <button
             onClick={handleClose}
-            className="absolute top-6 right-6 z-[103] flex h-10 w-10 items-center justify-center rounded-full bg-[#2f855a] p-2"
+            className="absolute top-6 right-6 z-[100003] flex h-10 w-10 items-center justify-center rounded-full bg-[#2f855a] p-2"
           >
             <p className="text-xl text-white">×</p>
           </button>

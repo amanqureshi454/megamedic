@@ -653,9 +653,14 @@ export function VideoSuper({
           } catch (error) {}
         }}
       >
-        <button id="home-reel-video-close" onClick={() => setIsVisible(false)}>
-          <span>×</span>
-        </button>
+        {isVisible && (
+          <button
+            id="home-reel-video-close"
+            onClick={() => setIsVisible(false)}
+          >
+            <span>×</span>
+          </button>
+        )}
         <video
           src={src}
           muted={muted}
