@@ -1,47 +1,102 @@
-import React, { useState, useRef } from "react";
+"use client";
+import React, { useState, useRef, useEffect } from "react";
+import { Play, Pause, Volume2, VolumeX } from "lucide-react";
 
 const MobileVideoExpand = () => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [playing, setPlaying] = useState(false);
+  const [playing, setPlaying] = useState(true);
   const [muted, setMuted] = useState(true);
+  const [progress, setProgress] = useState(0);
+  const [userInteracted, setUserInteracted] = useState(false);
 
   const videoRef = useRef(null);
 
-  const handlePlay = () => {
-    setPlaying(true);
-    setIsExpanded(true);
-    setMuted(false);
+  // 🟢 Update progress as video plays
+  const handleTimeUpdate = () => {
+    if (videoRef.current) {
+      const progressPercent =
+        (videoRef.current.currentTime / videoRef.current.duration) * 100;
+      setProgress(progressPercent || 0);
+    }
   };
 
+  // 🟢 Seek manually on progress bar click
+  const handleSeek = (e) => {
+    if (!videoRef.current) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const newTime = (clickX / rect.width) * videoRef.current.duration;
+    videoRef.current.currentTime = newTime;
+  };
+
+  // 🟢 Handle play button (open overlay)
+  const handlePlay = () => {
+    setIsExpanded(true);
+    setMuted(false);
+    setTimeout(() => {
+      videoRef.current?.play();
+      setPlaying(true);
+    }, 300);
+  };
+
+  // 🟢 Handle close overlay
   const handleClose = () => {
     setIsExpanded(false);
-    setPlaying(false);
     setMuted(true);
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
+      videoRef.current.muted = true;
+      videoRef.current.play();
+      setPlaying(true);
+    }
+  };
+
+  // 🟢 Toggle play/pause
+  const togglePlay = () => {
+    if (!videoRef.current) return;
+    if (playing) {
+      videoRef.current.pause();
+      setPlaying(false);
+    } else {
+      videoRef.current.play();
+      setPlaying(true);
     }
   };
 
   return (
-    <div className="relative block w-full md:hidden">
-      {/* Thumbnail/Normal State - Mobile Only */}
-      {!isExpanded && (
-        <div className="relative mx-auto flex h-64 w-[85%] items-center justify-center overflow-hidden rounded-3xl md:hidden">
-          <video
-            ref={videoRef}
-            className="h-full w-full object-cover"
-            src="/new-main.mp4"
-          />
+    <div
+      className={`md:hidden ${isExpanded ? "fixed inset-0 z-[101] flex items-center justify-center bg-black" : "relative block w-full"}`}
+    >
+      {/* 📱 Thumbnail / Normal State */}
 
-          {/* Play Button Overlay */}
+      <div
+        className={`${isExpanded ? "relative z-[102] h-auto max-h-screen w-full" : "mx-auto flex h-60 w-[85%] items-center justify-center rounded-xl"} overflow-hidden`}
+      >
+        <video
+          ref={videoRef}
+          className={`${isExpanded ? "h-auto max-h-screen w-full object-contain" : "h-full w-full object-cover"}`}
+          playsInline
+          muted={muted}
+          preload="auto"
+          loop
+          autoPlay
+          onPlay={() => setPlaying(true)}
+          onPause={() => setPlaying(false)}
+          onTimeUpdate={handleTimeUpdate}
+        >
+          <source src="/new-main.mp4" type="video/mp4" />
+        </video>
+        {/* ▶️ Play Button */}
+        {!isExpanded && (
           <div className="absolute top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
             <button
               id="home-reel-video-watch-btn"
               aria-label="Watch reel button"
               onClick={handlePlay}
+              className="flex items-center justify-center rounded-full bg-white/20 p-4 backdrop-blur-sm transition hover:bg-white/30"
             >
-              <div id="home-reel-video-watch-btn-base"></div>
-              <div id="home-reel-video-watch-btn-background"></div>
+              <div id="home-reel-video-watch-btn-base"></div>{" "}
+              <div id="home-reel-video-watch-btn-background"></div>{" "}
               <svg
                 id="home-reel-video-watch-btn-svg"
                 xmlns="http://www.w3.org/2000/svg"
@@ -50,43 +105,71 @@ const MobileVideoExpand = () => {
                 fill="none"
                 viewBox="0 0 36 36"
               >
+                {" "}
                 <path
                   fill="currentColor"
                   d="M7 7.29c0-1.5 1.59-2.466 2.92-1.776l20.656 10.71c1.439.747 1.439 2.805 0 3.552L9.92 30.486C8.589 31.176 7 30.21 7 28.71V7.29Z"
-                ></path>
+                ></path>{" "}
               </svg>
             </button>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
-      {/* Fullscreen Modal Overlay - Mobile Only */}
+      {/* 📱 Fullscreen Overlay */}
       {isExpanded && (
         <>
-          {/* Close Button - Outside Modal for z-index */}
+          {/* ❌ Close Button */}
+          <button
+            onClick={handleClose}
+            className="absolute top-6 right-6 z-[103] flex h-10 w-10 items-center justify-center rounded-full bg-[#2f855a] p-2"
+          >
+            <p className="text-xl text-white">×</p>
+          </button>
 
-          <div className="fixed inset-0 z-[101] flex items-center justify-center bg-black md:hidden">
+          {/* 🎥 Video */}
+
+          {/* 🎚 Custom Controls */}
+          <div className="absolute bottom-8 left-1/2 z-[103] flex -translate-x-1/2 items-center gap-4 rounded-lg bg-white/30 px-4 py-2 backdrop-blur-sm">
+            {/* Play / Pause */}
             <button
-              onClick={handleClose}
-              className="absolute top-6 right-6 z-[102] flex h-10 w-10 items-center justify-center rounded-full bg-[#2f855a] p-2 md:hidden"
+              onClick={() => {
+                togglePlay();
+                setUserInteracted(true);
+              }}
+              className="text-white transition-opacity hover:opacity-80"
+              aria-label={playing ? "Pause" : "Play"}
             >
-              <p className="text-xl text-white">×</p>
+              {playing ? (
+                <Pause className="h-6 w-6" />
+              ) : (
+                <Play className="h-6 w-6" />
+              )}
             </button>
-            {/* Video Container */}
-            <div className="relative h-auto max-h-screen w-full overflow-auto">
-              <video
-                ref={videoRef}
-                className="h-auto max-h-screen w-full object-contain"
-                controls
-                autoPlay
-                muted={muted}
-                onPlay={() => setPlaying(true)}
-                onPause={() => setPlaying(false)}
-              >
-                <source src="/new-main.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
+
+            {/* Progress Bar */}
+            <div
+              onClick={handleSeek}
+              className="relative h-2 w-64 cursor-pointer overflow-hidden rounded-full bg-black/30"
+            >
+              <span
+                className="absolute top-0 left-0 block h-full bg-black transition-[width] duration-150 ease-linear"
+                style={{ width: `${progress}%` }}
+              />
             </div>
+
+            {/* Volume */}
+            <button
+              onClick={() => setMuted(!muted)}
+              className="text-white transition-opacity hover:opacity-80"
+              aria-label={muted ? "Unmute" : "Mute"}
+            >
+              {muted ? (
+                <VolumeX className="h-6 w-6" />
+              ) : (
+                <Volume2 className="h-6 w-6" />
+              )}
+            </button>
           </div>
         </>
       )}

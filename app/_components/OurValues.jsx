@@ -57,6 +57,7 @@ export default function OurValues({ data }) {
         // </ClientOnly>
       )} */}
       <VideoGsap />
+      <MobileVideoExpand />
     </section>
   );
 }

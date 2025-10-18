@@ -3,8 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { PlayIcon, PauseIcon, Volume2, VolumeX } from "lucide-react";
-
+import { Play, Pause, Volume2, VolumeX } from "lucide-react";
 gsap.registerPlugin(ScrollTrigger);
 
 export default function VideoGsap() {
@@ -12,7 +11,6 @@ export default function VideoGsap() {
   const videoWrapperRef = useRef(null);
 
   const videoRef = useRef(null);
-  const playButtonRef = useRef(null);
   const timelineRef = useRef(null);
 
   const [mounted, setMounted] = useState(false);
@@ -51,7 +49,17 @@ export default function VideoGsap() {
     if (!video) return;
 
     if (playing) {
-      video.play().catch((err) => console.log("Play failed:", err));
+      if (video.readyState >= 2) {
+        video.play().catch((err) => console.log("Play failed:", err));
+      } else {
+        video.addEventListener(
+          "canplay",
+          () => {
+            video.play().catch((err) => console.log("Play failed:", err));
+          },
+          { once: true },
+        );
+      }
     } else {
       video.pause();
     }
@@ -71,29 +79,25 @@ export default function VideoGsap() {
     const container = containerRef.current;
     const videoWrapper = videoWrapperRef.current;
     const video = videoRef.current;
-    const playButton = playButtonRef.current;
     const navbar = document.querySelector(".navbar");
 
-    if (!container || !videoWrapper || !video || !playButton) return;
+    if (!container || !videoWrapper || !video) return;
 
     const expandVideo = () => {
+      // Expand animation
       gsap.to(videoWrapper, {
         width: "100vw",
         height: "100vh",
         duration: 0.8,
         ease: "power2.out",
-        // animate the CSS var --radius to 0
-        onStart: () => {}, // optional
-        // gsap can animate CSS vars directly:
-        vars: undefined, // noop to keep lint happy
       });
 
-      // animate the CSS var separately
       gsap.to(videoWrapper, {
         "--radius": "0px",
         duration: 0.8,
         ease: "power2.out",
       });
+
       gsap.to(videoRef, {
         "--radius": "0px",
         duration: 0.8,
@@ -102,8 +106,11 @@ export default function VideoGsap() {
 
       if (navbar) gsap.to(navbar, { y: -100, opacity: 0, duration: 0.5 });
 
-      setShowControls(true);
+      // Reset video and play from start
+      video.currentTime = 0;
+      video.play();
       setPlaying(true);
+      setShowControls(true);
       if (userInteracted) setMuted(false);
     };
 
@@ -127,9 +134,13 @@ export default function VideoGsap() {
 
       if (navbar) gsap.to(navbar, { y: 0, opacity: 1, duration: 0.5 });
 
+      // Pause and reset video completely
+      video.pause();
+      video.currentTime = 0;
+      video.muted = true;
       setShowControls(false);
       setPlaying(false);
-      setPlayButtonHidden(false);
+      setMuted(true);
     };
 
     const tl = gsap.timeline({
@@ -153,7 +164,7 @@ export default function VideoGsap() {
       if (tl.scrollTrigger) tl.scrollTrigger.kill();
       tl.kill();
     };
-  }, [mounted]);
+  }, [mounted, userInteracted]);
 
   // Progress tracking
   useEffect(() => {
@@ -202,19 +213,12 @@ export default function VideoGsap() {
     setProgress(percentage * 100);
   };
 
-  const handlePlayButtonClick = () => {
-    setPlaying(true);
-    setMuted(false);
-    setPlayButtonHidden(true);
-    setUserInteracted(true);
-  };
-
   if (!mounted) return null;
 
   return (
     <div
       ref={containerRef}
-      className="relative flex h-screen w-full items-center justify-center md:-mt-24"
+      className="relative hidden h-screen w-full items-center justify-center md:-mt-24 md:flex"
       suppressHydrationWarning
     >
       <div
@@ -235,22 +239,6 @@ export default function VideoGsap() {
           <source src="/Final_Textspacing.mp4" type="video/mp4" />
         </video>
 
-        {/* Play button overlay */}
-        {!playing && (
-          <div
-            ref={playButtonRef}
-            className="absolute top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2 cursor-pointer transition-all duration-300"
-          >
-            <button
-              onClick={handlePlayButtonClick}
-              className="rounded-full bg-white/20 p-4 text-white backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/30 active:scale-95"
-              aria-label="Play video"
-            >
-              <PlayIcon className="h-8 w-8" />
-            </button>
-          </div>
-        )}
-
         {/* Controls */}
         {showControls && (
           <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-4 rounded-lg bg-black/50 px-4 py-2 backdrop-blur-sm">
@@ -263,9 +251,9 @@ export default function VideoGsap() {
               aria-label={playing ? "Pause" : "Play"}
             >
               {playing ? (
-                <PauseIcon className="h-6 w-6" />
+                <Pause className="h-6 w-6" />
               ) : (
-                <PlayIcon className="h-6 w-6" />
+                <Play className="h-6 w-6" />
               )}
             </button>
 
