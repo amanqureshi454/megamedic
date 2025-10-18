@@ -56,8 +56,13 @@ export default function OurValues({ data }) {
         <VideoExpanded />
         // </ClientOnly>
       )} */}
-      <VideoGsap />
-      <MobileVideoExpand />
+      <div className="video-section">
+        <VideoGsap />
+      </div>
+
+      <div className="video-mobile">
+        <MobileVideoExpand />
+      </div>
     </section>
   );
 }

@@ -834,3 +834,25 @@ body {
 [bis_skin_checked] {
   /* This won't remove the attribute but acknowledges it exists */
 }
+
+@media (max-width: 950px) and (max-height: 480px) {
+  .video-section {
+    display: none !important;
+  }
+  .video-mobile.fixed {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999 !important; /* higher than any pinned elements */
+    background: #000 !important;
+    width: 100vw !important;
+    height: 100dvh; /* use dynamic viewport height for mobile Safari */
+  }
+  .video-mobile {
+    display: block !important;
+    width: 70% !important; /* half width when landscape */
+    margin: 0 auto;
+  }
+}

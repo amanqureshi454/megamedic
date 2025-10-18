@@ -76,6 +76,7 @@ export default function VideoGsap() {
   useEffect(() => {
     if (!mounted) return;
 
+    if (window.innerWidth < 768) return;
     const container = containerRef.current;
     const videoWrapper = videoWrapperRef.current;
     const video = videoRef.current;
@@ -83,7 +84,7 @@ export default function VideoGsap() {
 
     if (!container || !videoWrapper || !video) return;
 
-    const expandVideo = () => {
+    const expandVideo = (isEnterBack = false) => {
       // Expand animation
       gsap.to(videoWrapper, {
         width: "100vw",
@@ -108,10 +109,16 @@ export default function VideoGsap() {
 
       // Reset video and play from start
       video.currentTime = 0;
+
+      // If user has interacted OR coming back (enterBack), play with sound
+      if (userInteracted || isEnterBack) {
+        video.muted = false;
+        setMuted(false);
+      }
+
       video.play();
       setPlaying(true);
       setShowControls(true);
-      if (userInteracted) setMuted(false);
     };
 
     const resetVideo = () => {
@@ -151,8 +158,8 @@ export default function VideoGsap() {
         pin: true,
         scrub: false,
         markers: false,
-        onEnter: expandVideo,
-        onEnterBack: expandVideo,
+        onEnter: () => expandVideo(false),
+        onEnterBack: () => expandVideo(true),
         onLeave: resetVideo,
         onLeaveBack: resetVideo,
       },

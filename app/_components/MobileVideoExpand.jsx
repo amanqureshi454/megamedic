@@ -41,25 +41,28 @@ const MobileVideoExpand = () => {
   };
 
   // 🟢 Handle play button (open overlay)
+  // Open overlay and autoplay
   const handlePlay = () => {
     setIsExpanded(true);
     setMuted(false);
+
     setTimeout(() => {
-      videoRef.current?.play();
-      setPlaying(true);
+      if (videoRef.current) {
+        videoRef.current.play();
+        setPlaying(true);
+      }
     }, 300);
   };
 
-  // 🟢 Handle close overlay
+  // Close overlay and return to thumbnail mode (paused)
   const handleClose = () => {
     setIsExpanded(false);
     setMuted(true);
     if (videoRef.current) {
+      videoRef.current.pause();
       videoRef.current.currentTime = 0;
-      videoRef.current.muted = true;
-      videoRef.current.play();
-      setPlaying(true);
     }
+    setPlaying(false);
   };
 
   // 🟢 Toggle play/pause
@@ -76,10 +79,8 @@ const MobileVideoExpand = () => {
 
   return (
     <div
-      className={`md:hidden ${isExpanded ? "fixed inset-0 z-[101] flex items-center justify-center bg-black" : "relative block w-full"}`}
+      className={`video-mobile md:hidden ${isExpanded ? "fixed inset-0 z-[101] flex items-center justify-center bg-black" : "relative block w-full"}`}
     >
-      {/* 📱 Thumbnail / Normal State */}
-
       <div
         className={`${isExpanded ? "relative z-[102] h-auto max-h-screen w-full" : "mx-auto flex h-60 w-[85%] items-center justify-center rounded-xl"} overflow-hidden`}
       >
@@ -90,7 +91,6 @@ const MobileVideoExpand = () => {
           muted={muted}
           preload="auto"
           loop
-          autoPlay
           onPlay={() => setPlaying(true)}
           onPause={() => setPlaying(false)}
           onTimeUpdate={handleTimeUpdate}
@@ -164,7 +164,7 @@ const MobileVideoExpand = () => {
               className="relative h-2 w-64 cursor-pointer overflow-hidden rounded-full bg-black/30"
             >
               <span
-                className="absolute top-0 left-0 block h-full bg-black transition-[width] duration-150 ease-linear"
+                className="absolute top-0 left-0 block h-full bg-white transition-[width] duration-150 ease-linear"
                 style={{ width: `${progress}%` }}
               />
             </div>
