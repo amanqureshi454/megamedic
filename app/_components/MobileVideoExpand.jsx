@@ -15,13 +15,31 @@ const MobileVideoExpand = () => {
   useEffect(() => {
     const navbar = document.querySelector(".navbar");
     if (!navbar) return;
+
     gsap.to(navbar, {
       y: isExpanded ? -100 : 0,
       opacity: isExpanded ? 0 : 1,
       duration: 0.5,
       ease: "power2.out",
     });
+
+    // 🟢 Change browser theme color dynamically
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (!metaThemeColor) {
+      const meta = document.createElement("meta");
+      meta.name = "theme-color";
+      document.head.appendChild(meta);
+    }
+
+    const color = isExpanded ? "#000000" : "#ffffff"; // change color here
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute("content", color);
+
+    // optional — also change page bg
+    document.documentElement.style.backgroundColor = color;
   }, [isExpanded]);
+
   // 🟢 Update progress as video plays
   const handleTimeUpdate = () => {
     if (videoRef.current) {
