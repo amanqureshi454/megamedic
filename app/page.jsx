@@ -56,13 +56,13 @@ export default async function Home() {
   if (!homeData) return <p>hsdjk</p>;
   function OurRendered(item, index) {
     if (item?.__component === "blocks.home-hero") {
-      // return <HomeHero key={index} data={item} />;
+      return <HomeHero key={index} data={item} />;
     }
     if (item?.__component === "blocks.company-intro") {
-      // return <CompanyIntro key={index} data={item} />;
+      return <CompanyIntro key={index} data={item} />;
     }
     if (item?.__component === "blocks.partners") {
-      // return <OurPartners key={index} data={item} />;
+      return <OurPartners key={index} data={item} />;
     }
     if (item?.__component === "blocks.our-value") {
       return <OurValues key={index} data={item} />;
