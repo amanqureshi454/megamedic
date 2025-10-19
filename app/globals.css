@@ -845,14 +845,14 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 9999 !important; /* higher than any pinned elements */
+    z-index: 9999 !important;
     background: #000 !important;
     width: 100vw !important;
-    height: 100dvh; /* use dynamic viewport height for mobile Safari */
+    height: 100dvh;
   }
   .video-mobile {
     display: block !important;
-    width: 70% !important; /* half width when landscape */
+    width: 70% !important;
     margin: 0 auto;
     transition: background-color 0.3s ease;
   }

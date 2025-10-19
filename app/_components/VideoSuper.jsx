@@ -481,6 +481,50 @@ export function VideoSuper({
   };
 
   useEffect(() => {
+    const navbar = document.querySelector(".navbar");
+    if (!navbar) return;
+
+    gsap.to(navbar, {
+      y: isVisible ? -100 : 0,
+      opacity: isVisible ? 0 : 1,
+      duration: 0.5,
+      ease: "power2.out",
+    });
+
+    // 🟢 Change browser theme color dynamically
+    const color = isVisible ? "#000000" : "#ffffff";
+
+    // Update or create theme-color meta tag
+    let metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (!metaThemeColor) {
+      metaThemeColor = document.createElement("meta");
+      metaThemeColor.name = "theme-color";
+      document.head.appendChild(metaThemeColor);
+    }
+    metaThemeColor.setAttribute("content", color);
+
+    // ✅ FORCE update by removing and re-adding (helps with landscape)
+    const parent = metaThemeColor.parentNode;
+    parent.removeChild(metaThemeColor);
+    parent.appendChild(metaThemeColor);
+
+    // Change page background
+    document.documentElement.style.backgroundColor = color;
+    document.body.style.backgroundColor = color;
+
+    // ✅ CRITICAL: Set background on video containers
+    const videoMobile = document.querySelector(".video-mobile");
+    if (videoMobile) {
+      videoMobile.style.backgroundColor = color;
+    }
+
+    const videoSection = document.querySelector(".video-section");
+    if (videoSection) {
+      videoSection.style.backgroundColor = color;
+    }
+  }, [isVisible]);
+
+  useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 

@@ -123,8 +123,9 @@ const MobileVideoExpand = () => {
           className={`${isExpanded ? "h-auto max-h-screen w-full object-contain" : "h-full w-full object-cover"}`}
           playsInline
           muted={muted}
-          preload="auto"
           loop
+          preload="metadata"
+          poster="/thumbnail.jpg"
           onPlay={() => setPlaying(true)}
           onPause={() => setPlaying(false)}
           onTimeUpdate={handleTimeUpdate}
