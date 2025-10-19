@@ -854,5 +854,10 @@ body {
     display: block !important;
     width: 70% !important; /* half width when landscape */
     margin: 0 auto;
+    transition: background-color 0.3s ease;
   }
+}
+.video-mobile,
+.video-section {
+  transition: background-color 0.3s ease;
 }

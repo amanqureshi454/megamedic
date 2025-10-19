@@ -24,20 +24,36 @@ const MobileVideoExpand = () => {
     });
 
     // 🟢 Change browser theme color dynamically
-    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    const color = isExpanded ? "#000000" : "#ffffff";
+
+    // Update or create theme-color meta tag
+    let metaThemeColor = document.querySelector('meta[name="theme-color"]');
     if (!metaThemeColor) {
-      const meta = document.createElement("meta");
-      meta.name = "theme-color";
-      document.head.appendChild(meta);
+      metaThemeColor = document.createElement("meta");
+      metaThemeColor.name = "theme-color";
+      document.head.appendChild(metaThemeColor);
+    }
+    metaThemeColor.setAttribute("content", color);
+
+    // ✅ FORCE update by removing and re-adding (helps with landscape)
+    const parent = metaThemeColor.parentNode;
+    parent.removeChild(metaThemeColor);
+    parent.appendChild(metaThemeColor);
+
+    // Change page background
+    document.documentElement.style.backgroundColor = color;
+    document.body.style.backgroundColor = color;
+
+    // ✅ CRITICAL: Set background on video containers
+    const videoMobile = document.querySelector(".video-mobile");
+    if (videoMobile) {
+      videoMobile.style.backgroundColor = color;
     }
 
-    const color = isExpanded ? "#000000" : "#ffffff"; // change color here
-    document
-      .querySelector('meta[name="theme-color"]')
-      ?.setAttribute("content", color);
-
-    // optional — also change page bg
-    document.documentElement.style.backgroundColor = color;
+    const videoSection = document.querySelector(".video-section");
+    if (videoSection) {
+      videoSection.style.backgroundColor = color;
+    }
   }, [isExpanded]);
 
   // 🟢 Update progress as video plays
