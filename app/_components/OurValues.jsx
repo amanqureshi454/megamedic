@@ -7,21 +7,16 @@ import gsap from "gsap";
 import { useRef } from "react";
 import dynamic from "next/dynamic";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-const VideoExpanded = dynamic(() => import("./VideoExpanded"), {
-  ssr: false,
-});
+
 const MobileVideoExpand = dynamic(() => import("./MobileVideoExpand"), {
   ssr: false,
 });
 
-import ClientOnly from "../_lib/ClientOnly";
-import { useOrientation } from "../_lib/orientation";
 import VideoGsap from "./VideoGsap";
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export default function OurValues({ data }) {
   const ourValuesRef = useRef(null);
-  const orientation = useOrientation();
 
   useSplitTitleAnimation({
     trigger: "#our-value-gsap-title",

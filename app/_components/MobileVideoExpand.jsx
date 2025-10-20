@@ -124,7 +124,7 @@ const MobileVideoExpand = () => {
           playsInline
           muted={muted}
           loop
-          preload="metadata"
+          preload={isExpanded ? "auto" : "metadata"}
           poster="/thumbnail.jpg"
           onPlay={() => setPlaying(true)}
           onPause={() => setPlaying(false)}

@@ -54,7 +54,7 @@ const HomeHero3D = () => {
   return (
     <Canvas
       id="hero-3d"
-      className="!absolute bottom-[15%] lg:bottom-[8%] left-0 !size-full"
+      className="!absolute bottom-[15%] left-0 z-10 !size-full lg:bottom-[8%]"
       flat
       shadows
       camera={{
