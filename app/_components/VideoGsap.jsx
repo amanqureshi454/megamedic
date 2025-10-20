@@ -239,7 +239,7 @@ export default function VideoGsap() {
           playsInline
           muted={muted}
           loop
-          preload="metadata"
+          preload="auto"
           poster="/thumbnail.jpg"
           style={{ borderRadius: "var(--radius)" }}
           className="absolute inset-0 h-full w-full object-cover"
